@@ -201,12 +201,18 @@ void clNCIMasterMortality::PreMortCalcs( clTreePopulation * p_oPop )
 
 #ifdef NCI_WRITER
     using namespace std;
-    float fX, fY;
     int iTS = mp_oSimManager->GetCurrentTimestep();
     char cFilename[100];
     sprintf(cFilename, "%s%d%s", "MortNCI", iTS, ".txt");
-    fstream out( cFilename, ios::trunc | ios::out );
-    out << "Timestep\tSpecies\tDBH\tNCI\tSize Effect\tCrowding Effect\tDamage Effect\tSurv Prob\tDead?\n";
+    std::ifstream file(cFilename);
+    fstream out;
+    if (file) {
+      out.open( cFilename, ios::app | ios::out );
+    } else {
+      out.open( cFilename, ios::app | ios::out );
+      out << "Timestep\tSpecies\tDBH\tSize Effect\tCrowding Effect\tDamage Effect\tTemp Effect\tPrecip Effect\tN Effect\tSurvival Prob\tDead?\n";
+    }
+
 #endif
 
     clTreeSearch * p_oNCITrees; //trees that this growth behavior applies to
@@ -306,8 +312,9 @@ void clNCIMasterMortality::PreMortCalcs( clTreePopulation * p_oPop )
 #ifdef NCI_WRITER
           //if (8 == p_oTree->GetSpecies()) {
           out << iTS << "\t"  << p_oTree->GetSpecies() << "\t" << fDbh
-              << "\t" << fNCI  << "\t" << fSizeEffect << "\t"
-              << fCrowdingEffect << "\t" << fDamageEffect << "\t"
+              << "\t" << fSizeEffect << "\t"
+              << fCrowdingEffect << "\t" << fDamageEffect << "\t" << p_fTempEffect[iSpecies] << "\t" <<
+              p_fPrecipEffect[iSpecies] << "\t" << p_fNEffect[iSpecies] << "\t"
               << fSurvivalProb << "\t" << bIsDead << "\n";
           //}
 #endif

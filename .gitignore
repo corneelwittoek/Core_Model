@@ -4,14 +4,11 @@ Release
 *.a
 *.la
 *.lai
-*.exe
 *.o
 .cproject
 *.xml
 .project
 coremodel.exe
-*.dll
-*.exe
 /.settings
 /HarvestTrees.txt
 /Default/
